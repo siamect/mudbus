@@ -145,8 +145,8 @@ void Mudbus::Run()
       Serial.print("=");
       Serial.println(R[Start]);
     #endif    
-    ByteArray[5] = 2; //Number of bytes after this one.
-    MessageLength = 8;
+    ByteArray[5] = 6; //Number of bytes after this one.
+    MessageLength = 12;
     client.write(ByteArray, MessageLength);
     Writes = 1 + Writes * (Writes < 999);
     FC = MB_FC_NONE;
