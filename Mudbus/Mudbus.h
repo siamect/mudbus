@@ -18,7 +18,7 @@
 
 //#define MbDebug
 
-#include "WProgram.h"
+#include "Arduino.h"
 
 #include <SPI.h>
 #include <Ethernet.h>

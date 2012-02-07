@@ -18,7 +18,7 @@
 
 #include "Mudbus.h"
 
-Server MbServer(MB_PORT);
+EthernetServer MbServer(MB_PORT);
 
 Mudbus::Mudbus()
 {
@@ -29,7 +29,7 @@ void Mudbus::Run()
   Runs = 1 + Runs * (Runs < 999);
 
   //****************** Read from socket ****************
-  Client client = MbServer.available();
+  EthernetClient client = MbServer.available();
   if(client.available())
   {
     Reads = 1 + Reads * (Reads < 999);
