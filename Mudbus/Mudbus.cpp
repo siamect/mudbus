@@ -59,7 +59,7 @@ void Mudbus::Run()
       #endif
     }
   }
-  
+
   int Start, WordDataLength, ByteDataLength, CoilDataLength, MessageLength;
 
   //****************** Read Coils **********************
@@ -83,7 +83,7 @@ void Mudbus::Run()
       for(int j = 0; j < 8; j++)
       {
         bitWrite(ByteArray[9 + i], j, C[Start + i * 8 + j]);
-      }      
+      }
     }
     MessageLength = ByteDataLength + 9;
     client.write(ByteArray, MessageLength);
@@ -102,7 +102,7 @@ void Mudbus::Run()
       Serial.print(Start);
       Serial.print(" L=");
       Serial.println(WordDataLength);
-    #endif    
+    #endif
     ByteArray[5] = ByteDataLength + 3; //Number of bytes after this one.
     ByteArray[8] = ByteDataLength;     //Number of bytes after this one (or number of bytes of data).
     for(int i = 0; i < WordDataLength; i++)
@@ -126,7 +126,7 @@ void Mudbus::Run()
       Serial.print(Start);
       Serial.print("=");
       Serial.println(C[Start]);
-    #endif    
+    #endif
     ByteArray[5] = 2; //Number of bytes after this one.
     MessageLength = 8;
     client.write(ByteArray, MessageLength);
@@ -144,13 +144,66 @@ void Mudbus::Run()
       Serial.print(Start);
       Serial.print("=");
       Serial.println(R[Start]);
-    #endif    
+    #endif
     ByteArray[5] = 6; //Number of bytes after this one.
     MessageLength = 12;
     client.write(ByteArray, MessageLength);
     Writes = 1 + Writes * (Writes < 999);
     FC = MB_FC_NONE;
-  }  
+  }
+
+
+  //****************** Write Multiple Coils **********************
+  if(FC == MB_FC_WRITE_MULTIPLE_COILS)
+  {
+    Start = word(ByteArray[8],ByteArray[9]);
+    CoilDataLength = word(ByteArray[10],ByteArray[11]);
+    ByteDataLength = CoilDataLength / 8;
+    if(ByteDataLength * 8 < CoilDataLength) ByteDataLength++;
+    CoilDataLength = ByteDataLength * 8;
+    #ifdef MbDebug
+      Serial.print(" MB_FC_WRITE_MULTIPLE_COILS S=");
+      Serial.print(Start);
+      Serial.print(" L=");
+      Serial.println(CoilDataLength);
+    #endif
+    ByteArray[5] = ByteDataLength + 5; //Number of bytes after this one.
+    for(int i = 0; i < ByteDataLength ; i++)
+    {
+      for(int j = 0; j < 8; j++)
+      {
+        C[Start + i * 8 + j] = bitRead( ByteArray[13 + i], j);
+      }
+    }
+    MessageLength = 12;
+    client.write(ByteArray, MessageLength);
+    Writes = 1 + Writes * (Writes < 999);
+    FC = MB_FC_NONE;
+  }
+
+
+  //****************** Write Multiple Registers ******************
+  if(FC == MB_FC_WRITE_MULTIPLE_REGISTERS)
+  {
+    Start = word(ByteArray[8],ByteArray[9]);
+    WordDataLength = word(ByteArray[10],ByteArray[11]);
+    ByteDataLength = WordDataLength * 2;
+    #ifdef MbDebug
+      Serial.print(" MB_FC_READ_REGISTERS S=");
+      Serial.print(Start);
+      Serial.print(" L=");
+      Serial.println(WordDataLength);
+    #endif
+    ByteArray[5] = ByteDataLength + 3; //Number of bytes after this one.
+    for(int i = 0; i < WordDataLength; i++)
+    {
+      R[Start + i] =  word(ByteArray[ 13 + i * 2],ByteArray[14 + i * 2]);
+    }
+    MessageLength = 12;
+    client.write(ByteArray, MessageLength);
+    Writes = 1 + Writes * (Writes < 999);
+    FC = MB_FC_NONE;
+  }
 
   #ifdef MbDebug
     Serial.print("Mb runs: ");
@@ -163,10 +216,13 @@ void Mudbus::Run()
   #endif
 }
 
+
 void Mudbus::SetFC(int fc)
 {
   if(fc == 1) FC = MB_FC_READ_COILS;
   if(fc == 3) FC = MB_FC_READ_REGISTERS;
   if(fc == 5) FC = MB_FC_WRITE_COIL;
   if(fc == 6) FC = MB_FC_WRITE_REGISTER;
+  if(fc == 15) FC = MB_FC_WRITE_MULTIPLE_COILS;
+  if(fc == 16) FC = MB_FC_WRITE_MULTIPLE_REGISTERS;
 }
