@@ -63,7 +63,7 @@ void Mudbus::Run()
   int Start, WordDataLength, ByteDataLength, CoilDataLength, MessageLength;
 
   //****************** Read Coils **********************
-  if(FC == MB_FC_READ_COILS)
+  if(FC == MB_FC_READ_COILS_0x)
   {
     Start = word(ByteArray[8],ByteArray[9]);
     CoilDataLength = word(ByteArray[10],ByteArray[11]);
@@ -92,7 +92,7 @@ void Mudbus::Run()
   }
 
   //****************** Read Registers ******************
-  if(FC == MB_FC_READ_REGISTERS)
+  if(FC == MB_FC_READ_REGISTERS_4x)
   {
     Start = word(ByteArray[8],ByteArray[9]);
     WordDataLength = word(ByteArray[10],ByteArray[11]);
@@ -117,7 +117,7 @@ void Mudbus::Run()
   }
 
   //****************** Write Coil **********************
-  if(FC == MB_FC_WRITE_COIL)
+  if(FC == MB_FC_WRITE_COIL_0x)
   {
     Start = word(ByteArray[8],ByteArray[9]);
     C[Start] = word(ByteArray[10],ByteArray[11]) > 0;
@@ -135,7 +135,7 @@ void Mudbus::Run()
   } 
 
   //****************** Write Register ******************
-  if(FC == MB_FC_WRITE_REGISTER)
+  if(FC == MB_FC_WRITE_REGISTER_4x)
   {
     Start = word(ByteArray[8],ByteArray[9]);
     R[Start] = word(ByteArray[10],ByteArray[11]);
@@ -154,7 +154,7 @@ void Mudbus::Run()
 
 
   //****************** Write Multiple Coils **********************
-  if(FC == MB_FC_WRITE_MULTIPLE_COILS)
+  if(FC == MB_FC_WRITE_MULTIPLE_COILS_0x)
   {
     Start = word(ByteArray[8],ByteArray[9]);
     CoilDataLength = word(ByteArray[10],ByteArray[11]);
@@ -183,7 +183,7 @@ void Mudbus::Run()
 
 
   //****************** Write Multiple Registers ******************
-  if(FC == MB_FC_WRITE_MULTIPLE_REGISTERS)
+  if(FC == MB_FC_WRITE_MULTIPLE_REGISTERS_4x)
   {
     Start = word(ByteArray[8],ByteArray[9]);
     WordDataLength = word(ByteArray[10],ByteArray[11]);
@@ -219,10 +219,44 @@ void Mudbus::Run()
 
 void Mudbus::SetFC(int fc)
 {
-  if(fc == 1) FC = MB_FC_READ_COILS;
-  if(fc == 3) FC = MB_FC_READ_REGISTERS;
-  if(fc == 5) FC = MB_FC_WRITE_COIL;
-  if(fc == 6) FC = MB_FC_WRITE_REGISTER;
-  if(fc == 15) FC = MB_FC_WRITE_MULTIPLE_COILS;
-  if(fc == 16) FC = MB_FC_WRITE_MULTIPLE_REGISTERS;
+	
+// Read coils (FC 1) 0x
+  if(fc == 1) FC = MB_FC_READ_COILS_0x;
+
+// Read input discretes (FC 2) 1x
+  if(fc == 2) FC = MB_FC_READ_INPUTS_1x;
+
+// Read multiple registers (FC 3) 4x
+  if(fc == 3) FC = MB_FC_READ_REGISTERS_4x;
+
+// Read input registers (FC 4) 3x
+  if(fc == 4) FC = MB_FC_READ_INPUT_REGISTERS_3x;
+
+// Write coil (FC 5) 0x
+  if(fc == 5) FC = MB_FC_WRITE_COIL_0x;
+
+// Write single register (FC 6) 4x
+  if(fc == 6) FC = MB_FC_WRITE_REGISTER_4x;
+
+// Read exception status (FC 7) we skip this one
+
+// Force multiple coils (FC 15) 0x
+  if(fc == 15) FC = MB_FC_WRITE_MULTIPLE_COILS_0x;
+
+// Write multiple registers (FC 16) 4x
+  if(fc == 16) FC = MB_FC_WRITE_MULTIPLE_REGISTERS_4x;
+
+// Read general reference (FC 20)  we skip this one
+
+// Write general reference (FC 21)  we skip this one
+
+// Mask write register (FC 22)  we skip this one
+
+// Read/write registers (FC 23)  we skip this one
+
+// Read FIFO queue (FC 24)  we skip this one
+
 }
+
+
+

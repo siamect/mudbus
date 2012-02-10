@@ -26,18 +26,22 @@
 #ifndef Mudbus_h
 #define Mudbus_h
 
-#define MB_N_R 125 //Max 16 bit registers for Modbus is 125
-#define MB_N_C 128 //Max coils for Modbus is 2000 - dont need that many so here is a multiple of 8
+#define MB_N_C_0x 128 //Max coils for Modbus is 2000 - dont need that many so here is a multiple of 8
+#define MB_N_I_1x 128 //Max inputs for Modbus is 2000 - dont need that many so here is a multiple of 8
+#define MB_N_IR_3x 125 //Max 16 bit input registers for Modbus is 125
+#define MB_N_HR_4x 125 //Max 16 bit holding registers for Modbus is 125
 #define MB_PORT 502
 
 enum MB_FC {
-  MB_FC_NONE           = 0,
-  MB_FC_READ_COILS     = 1,
-  MB_FC_READ_REGISTERS = 3,
-  MB_FC_WRITE_COIL     = 5,
-  MB_FC_WRITE_REGISTER = 6,
-  MB_FC_WRITE_MULTIPLE_COILS = 15,
-  MB_FC_WRITE_MULTIPLE_REGISTERS = 16
+  MB_FC_NONE                        = 0,
+  MB_FC_READ_COILS_0x               = 1,
+  MB_FC_READ_INPUTS_1x              = 2,
+  MB_FC_READ_REGISTERS_4x           = 3,
+  MB_FC_READ_INPUT_REGISTERS_3x     = 4,
+  MB_FC_WRITE_COIL_0x               = 5,
+  MB_FC_WRITE_REGISTER_4x           = 6,
+  MB_FC_WRITE_MULTIPLE_COILS_0x     = 15,
+  MB_FC_WRITE_MULTIPLE_REGISTERS_4x = 16
 };
 
 class Mudbus
@@ -45,8 +49,10 @@ class Mudbus
 public:
   Mudbus();
   void Run();  
-  int  R[MB_N_R];
-  bool C[MB_N_C];  
+  bool C[MB_N_C_0x];  
+  bool I[MB_N_I_1x];  
+  int  IR[MB_N_IR_3x];
+  int  R[MB_N_HR_4x];
   bool Active;    
   unsigned long PreviousActivityTime;
   int Runs, Reads, Writes;
