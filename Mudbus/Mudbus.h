@@ -26,10 +26,10 @@
 #ifndef Mudbus_h
 #define Mudbus_h
 
-#define MB_N_C_0x 128 //Max coils for Modbus is 2000 - dont need that many so here is a multiple of 8
-#define MB_N_I_1x 128 //Max inputs for Modbus is 2000 - dont need that many so here is a multiple of 8
-#define MB_N_IR_3x 125 //Max 16 bit input registers for Modbus is 125
-#define MB_N_HR_4x 125 //Max 16 bit holding registers for Modbus is 125
+#define MB_N_C_0x 64 //Max coils for Modbus is 2000 - dont need that many so here is a multiple of 8
+#define MB_N_I_1x 64 //Max inputs for Modbus is 2000 - dont need that many so here is a multiple of 8
+#define MB_N_IR_3x 16 //Max 16 bit input registers for Modbus is 125
+#define MB_N_HR_4x 16 //Max 16 bit holding registers for Modbus is 125
 #define MB_PORT 502
 
 enum MB_FC {
@@ -55,12 +55,13 @@ public:
   int  R[MB_N_HR_4x];
   bool Active;    
   unsigned long PreviousActivityTime;
-  int Runs, Reads, Writes, MessageLength;
+  int Runs, Reads, Writes, MessageLength, Offset;
 private: 
   uint8_t ByteReceiveArray[260];
   uint8_t ByteSendArray[260];
   MB_FC FC;
   void SetFC(int fc);
+  void SetOffset();
 };
 
 #endif
