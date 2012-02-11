@@ -39,6 +39,11 @@ void Mudbus::Run()
       ByteArray[i] = client.read();
       i++;
     }
+    MessageLength = i;
+    #ifdef MbDebug
+      Serial.print("MessageLength = ");
+      Serial.println(MessageLength);
+    #endif
     SetFC(ByteArray[7]);  //Byte 7 of request is FC
     if(!Active)
     {
@@ -71,7 +76,7 @@ void Mudbus::Run()
     if(ByteDataLength * 8 < CoilDataLength) ByteDataLength++;      
     CoilDataLength = ByteDataLength * 8;
     #ifdef MbDebug
-      Serial.print(" MB_FC_READ_COILS S=");
+      Serial.print(" MB_FC_READ_COILS_0x S=");
       Serial.print(Start);
       Serial.print(" L=");
       Serial.println(CoilDataLength);
@@ -100,7 +105,7 @@ void Mudbus::Run()
     if(ByteDataLength * 8 < CoilDataLength) ByteDataLength++;      
     CoilDataLength = ByteDataLength * 8;
     #ifdef MbDebug
-      Serial.print(" MB_FC_READ_COILS S=");
+      Serial.print(" MB_FC_READ_INPUTS_1x S=");
       Serial.print(Start);
       Serial.print(" L=");
       Serial.println(CoilDataLength);
@@ -127,7 +132,7 @@ void Mudbus::Run()
     WordDataLength = word(ByteArray[10],ByteArray[11]);
     ByteDataLength = WordDataLength * 2;
     #ifdef MbDebug
-      Serial.print(" MB_FC_READ_REGISTERS S=");
+      Serial.print(" MB_FC_READ_REGISTERS_4x S=");
       Serial.print(Start);
       Serial.print(" L=");
       Serial.println(WordDataLength);
@@ -152,7 +157,7 @@ void Mudbus::Run()
     WordDataLength = word(ByteArray[10],ByteArray[11]);
     ByteDataLength = WordDataLength * 2;
     #ifdef MbDebug
-      Serial.print(" MB_FC_READ_REGISTERS S=");
+      Serial.print(" MB_FC_READ_INPUT_REGISTERS_3x S=");
       Serial.print(Start);
       Serial.print(" L=");
       Serial.println(WordDataLength);
@@ -178,7 +183,7 @@ void Mudbus::Run()
     Start = word(ByteArray[8],ByteArray[9]);
     C[Start] = word(ByteArray[10],ByteArray[11]) > 0;
     #ifdef MbDebug
-      Serial.print(" MB_FC_WRITE_COIL C");
+      Serial.print(" MB_FC_WRITE_COIL_0x C");
       Serial.print(Start);
       Serial.print("=");
       Serial.println(C[Start]);
@@ -196,7 +201,7 @@ void Mudbus::Run()
     Start = word(ByteArray[8],ByteArray[9]);
     R[Start] = word(ByteArray[10],ByteArray[11]);
     #ifdef MbDebug
-      Serial.print(" MB_FC_WRITE_REGISTER R");
+      Serial.print(" MB_FC_WRITE_REGISTER_4x R");
       Serial.print(Start);
       Serial.print("=");
       Serial.println(R[Start]);
@@ -218,7 +223,7 @@ void Mudbus::Run()
     if(ByteDataLength * 8 < CoilDataLength) ByteDataLength++;
     CoilDataLength = ByteDataLength * 8;
     #ifdef MbDebug
-      Serial.print(" MB_FC_WRITE_MULTIPLE_COILS S=");
+      Serial.print(" MB_FC_WRITE_MULTIPLE_COILS_0x S=");
       Serial.print(Start);
       Serial.print(" L=");
       Serial.println(CoilDataLength);
@@ -245,7 +250,7 @@ void Mudbus::Run()
     WordDataLength = word(ByteArray[10],ByteArray[11]);
     ByteDataLength = WordDataLength * 2;
     #ifdef MbDebug
-      Serial.print(" MB_FC_READ_REGISTERS S=");
+      Serial.print(" MB_FC_WRITE_MULTIPLE_REGISTERS_4x S=");
       Serial.print(Start);
       Serial.print(" L=");
       Serial.println(WordDataLength);

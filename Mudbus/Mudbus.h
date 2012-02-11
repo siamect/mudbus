@@ -55,7 +55,7 @@ public:
   int  R[MB_N_HR_4x];
   bool Active;    
   unsigned long PreviousActivityTime;
-  int Runs, Reads, Writes;
+  int Runs, Reads, Writes, MessageLength;
 private: 
   uint8_t ByteArray[260];
   MB_FC FC;
