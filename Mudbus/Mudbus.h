@@ -57,7 +57,8 @@ public:
   unsigned long PreviousActivityTime;
   int Runs, Reads, Writes, MessageLength;
 private: 
-  uint8_t ByteArray[260];
+  uint8_t ByteReceiveArray[260];
+  uint8_t ByteSendArray[260];
   MB_FC FC;
   void SetFC(int fc);
 };
