@@ -53,15 +53,15 @@ public:
   bool I[MB_N_I_1x];  
   int  IR[MB_N_IR_3x];
   int  R[MB_N_HR_4x];
-  bool Active;    
+  bool Active, JustReceivedOne;    
   unsigned long PreviousActivityTime;
-  int Runs, Reads, Writes, MessageLength, Offset;
+  int Runs, Reads, Writes, TotalMessageLength, MessageStart, NoOfBytesToSend;
 private: 
   uint8_t ByteReceiveArray[260];
   uint8_t ByteSendArray[260];
   MB_FC FC;
   void SetFC(int fc);
-  void SetOffset();
+  void PopulateSendBuffer(uint8_t *SendBuffer, int NoOfBytes);
 };
 
 #endif
