@@ -6,8 +6,20 @@
 //#define DEBUG
 unsigned long time;
 Mudbus Mb;
-//Function codes 1(read coils), 3(read registers), 5(write coil), 6(write register)
-//signed int Mb.R[0 to 125] and bool Mb.C[0 to 128] MB_N_R MB_N_C
+//Function codes 
+//Read coils (FC 1) 0x
+//Read input discretes (FC 2) 1x
+//Read multiple registers (FC 3) 4x
+//Read input registers (FC 4) 3x
+//Write coil (FC 5) 0x
+//Write single register (FC 6) 4x
+//Force multiple coils (FC 15) 0x
+//Write multiple registers (FC 16) 4x
+//    bool C[MB_N_C_0x];
+//    bool I[MB_N_I_1x];
+//    int  IR[MB_N_IR_3x];
+//    int  R[MB_N_HR_4x];
+
 //Port 502 (defined in Mudbus.h) MB_PORT
 
 void setup()
