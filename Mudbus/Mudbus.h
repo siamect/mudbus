@@ -33,35 +33,35 @@
 #define MB_PORT 502
 
 enum MB_FC {
-  MB_FC_NONE                        = 0,
-  MB_FC_READ_COILS_0x               = 1,
-  MB_FC_READ_INPUTS_1x              = 2,
-  MB_FC_READ_REGISTERS_4x           = 3,
-  MB_FC_READ_INPUT_REGISTERS_3x     = 4,
-  MB_FC_WRITE_COIL_0x               = 5,
-  MB_FC_WRITE_REGISTER_4x           = 6,
-  MB_FC_WRITE_MULTIPLE_COILS_0x     = 15,
-  MB_FC_WRITE_MULTIPLE_REGISTERS_4x = 16
+    MB_FC_NONE                        = 0,
+    MB_FC_READ_COILS_0x               = 1,
+    MB_FC_READ_INPUTS_1x              = 2,
+    MB_FC_READ_REGISTERS_4x           = 3,
+    MB_FC_READ_INPUT_REGISTERS_3x     = 4,
+    MB_FC_WRITE_COIL_0x               = 5,
+    MB_FC_WRITE_REGISTER_4x           = 6,
+    MB_FC_WRITE_MULTIPLE_COILS_0x     = 15,
+    MB_FC_WRITE_MULTIPLE_REGISTERS_4x = 16
 };
 
 class Mudbus
 {
 public:
-  Mudbus();
-  void Run();  
-  bool C[MB_N_C_0x];  
-  bool I[MB_N_I_1x];  
-  int  IR[MB_N_IR_3x];
-  int  R[MB_N_HR_4x];
-  bool Active, JustReceivedOne;    
-  unsigned long PreviousActivityTime;
-  int Runs, Reads, Writes, TotalMessageLength, MessageStart, NoOfBytesToSend;
-private: 
-  uint8_t ByteReceiveArray[260];
-  uint8_t ByteSendArray[260];
-  MB_FC FC;
-  void SetFC(int fc);
-  void PopulateSendBuffer(uint8_t *SendBuffer, int NoOfBytes);
+    Mudbus();
+    void Run();
+    bool C[MB_N_C_0x];
+    bool I[MB_N_I_1x];
+    int  IR[MB_N_IR_3x];
+    int  R[MB_N_HR_4x];
+    bool Active, JustReceivedOne;
+    unsigned long PreviousActivityTime;
+    int Runs, Reads, Writes, TotalMessageLength, MessageStart, NoOfBytesToSend;
+private:
+    uint8_t ByteReceiveArray[260];
+    uint8_t ByteSendArray[260];
+    MB_FC FC;
+    void SetFC(int fc);
+    void PopulateSendBuffer(uint8_t *SendBuffer, int NoOfBytes);
 };
 
 #endif
