@@ -312,27 +312,27 @@ void Mudbus::SetFC(int fc)
   if(fc == 1) FC = MB_FC_READ_COILS_0x;
 
 // Read input discretes (FC 2) 1x
-  if(fc == 2) FC = MB_FC_READ_INPUTS_1x;
+  else if(fc == 2) FC = MB_FC_READ_INPUTS_1x;
 
 // Read multiple registers (FC 3) 4x
-  if(fc == 3) FC = MB_FC_READ_REGISTERS_4x;
+  else if(fc == 3) FC = MB_FC_READ_REGISTERS_4x;
 
 // Read input registers (FC 4) 3x
-  if(fc == 4) FC = MB_FC_READ_INPUT_REGISTERS_3x;
+  else if(fc == 4) FC = MB_FC_READ_INPUT_REGISTERS_3x;
 
 // Write coil (FC 5) 0x
-  if(fc == 5) FC = MB_FC_WRITE_COIL_0x;
+  else if(fc == 5) FC = MB_FC_WRITE_COIL_0x;
 
 // Write single register (FC 6) 4x
-  if(fc == 6) FC = MB_FC_WRITE_REGISTER_4x;
+  else if(fc == 6) FC = MB_FC_WRITE_REGISTER_4x;
 
 // Read exception status (FC 7) we skip this one
 
 // Force multiple coils (FC 15) 0x
-  if(fc == 15) FC = MB_FC_WRITE_MULTIPLE_COILS_0x;
+  else if(fc == 15) FC = MB_FC_WRITE_MULTIPLE_COILS_0x;
 
 // Write multiple registers (FC 16) 4x
-  if(fc == 16) FC = MB_FC_WRITE_MULTIPLE_REGISTERS_4x;
+  else if(fc == 16) FC = MB_FC_WRITE_MULTIPLE_REGISTERS_4x;
 
 // Read general reference (FC 20)  we skip this one
 
@@ -343,7 +343,12 @@ void Mudbus::SetFC(int fc)
 // Read/write registers (FC 23)  we skip this one
 
 // Read FIFO queue (FC 24)  we skip this one
+   else {
+	   Serial.print(" FC not supported: ");
+	   Serial.print(fc);
+	   Serial.println();
 
+	   }
 }
 
 
