@@ -263,7 +263,7 @@ void Mudbus::Run()
       Serial.print(" L=");
       Serial.println(WordDataLength);
     #endif
-    ByteReceiveArray[5 + Offset] = ByteDataLength + 3; //Number of bytes after this one.
+    ByteReceiveArray[5 + Offset] = ByteDataLength + 4; //Number of bytes after this one.
     for(int i = 0; i < WordDataLength; i++)
     {
       R[Start + i] =  word(ByteReceiveArray[ 13 + i * 2 + Offset],ByteReceiveArray[14 + i * 2 + Offset]);
