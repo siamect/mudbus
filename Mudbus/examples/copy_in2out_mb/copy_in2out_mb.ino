@@ -55,9 +55,9 @@ word location;
   for (location=0 ; location< MB_N_IR_3x; location++) { 
     Mb.IR[location] = Mb.R[location];
   }
-/*
+
     if (time < millis()) { 
-    time += 1000000;
+    time += 1000;
     
     Serial.print("\n\nIR0=");
     Serial.print(Mb.IR[0]);
@@ -114,7 +114,7 @@ word location;
     Serial.print(Mb.C[5]);
 
   }
-*/
+
 }
 
 /*
