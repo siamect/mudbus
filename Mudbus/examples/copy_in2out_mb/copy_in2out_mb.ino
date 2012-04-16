@@ -4,7 +4,7 @@
 #include "Mudbus.h"
 
 //#define DEBUG
-unsigned long time;
+static unsigned long time;
 Mudbus Mb;
 //Function codes 
 //Read coils (FC 1) 0x
@@ -37,7 +37,7 @@ void setup()
 
   delay(5000);  //Time to open the terminal
   Serial.begin(115200);
-
+  time = millis()+1000;
 
 
 }
@@ -56,7 +56,7 @@ word location;
     Mb.IR[location] = Mb.R[location];
   }
 
-    if (time < millis()) { 
+    if ((long)( millis() - time ) > 0) { 
     time += 1000;
     
     Serial.print("\n\nIR0=");
