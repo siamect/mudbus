@@ -15,11 +15,15 @@ Mudbus	KEYWORD1
 Run	KEYWORD2
 R	KEYWORD2
 C	KEYWORD2
+I	KEYWORD2
+IR	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
 #######################################
 
-MB_N_R	LITERAL1
-MB_N_C	LITERAL1
-MB_PORT	LITERAL1
+MB_N_C_0x LITERAL1
+MB_N_I_1x LITERAL1
+MB_N_IR_3x LITERAL1
+MB_N_HR_4x LITERAL1
+
