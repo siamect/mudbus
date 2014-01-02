@@ -83,6 +83,10 @@ void Mudbus::Run()
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
             CoilDataLength = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]);
+            if((Start+CoilDataLength) > MB_N_C_0x){
+                FC = 0;
+                break;
+            }
             ByteDataLength = CoilDataLength / 8;
             if(ByteDataLength * 8 < CoilDataLength) ByteDataLength++;
             CoilDataLength = ByteDataLength * 8;
@@ -114,6 +118,10 @@ void Mudbus::Run()
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
             CoilDataLength = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]);
+            if((Start+CoilDataLength) > MB_N_I_1x){
+                FC = 0;
+                break;
+            }
             ByteDataLength = CoilDataLength / 8;
             if(ByteDataLength * 8 < CoilDataLength) ByteDataLength++;
             CoilDataLength = ByteDataLength * 8;
@@ -145,6 +153,10 @@ void Mudbus::Run()
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
             WordDataLength = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]);
+            if((Start+WordDataLength) > MB_N_HR_4x){
+                FC = 0;
+                break;
+            }
             ByteDataLength = WordDataLength * 2;
 #ifdef MbDebug
             Serial.print(" MB_FC_READ_REGISTERS_4x S=");
@@ -172,6 +184,10 @@ void Mudbus::Run()
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
             WordDataLength = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]);
+            if((Start+WordDataLength) > MB_N_IR_3x){
+                FC = 0;
+                break;
+            }
             ByteDataLength = WordDataLength * 2;
 #ifdef MbDebug
             Serial.print(" MB_FC_READ_INPUT_REGISTERS_3x S=");
@@ -200,6 +216,10 @@ void Mudbus::Run()
         else if(FC == MB_FC_WRITE_COIL_0x)
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
+            if(Start > MB_N_C_0x){
+                FC = 0;
+                break;
+            }
             C[Start] = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]) > 0;
 #ifdef MbDebug
             Serial.print(" MB_FC_WRITE_COIL_0x C");
@@ -218,6 +238,10 @@ void Mudbus::Run()
         else if(FC == MB_FC_WRITE_REGISTER_4x)
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
+            if(Start > MB_N_HR_4x){
+                FC = 0;
+                break;
+            }
             R[Start] = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]);
 #ifdef MbDebug
             Serial.print(" MB_FC_WRITE_REGISTER_4x R");
@@ -238,6 +262,10 @@ void Mudbus::Run()
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
             CoilDataLength = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]);
+            if((Start+CoilDataLength) > MB_N_C_0x){
+                FC = 0;
+                break;
+            }
             ByteDataLength = CoilDataLength / 8;
             if(ByteDataLength * 8 < CoilDataLength) ByteDataLength++;
             CoilDataLength = ByteDataLength * 8;
@@ -269,6 +297,10 @@ void Mudbus::Run()
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
             WordDataLength = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]);
+            if((Start+WordDataLength) > MB_N_HR_4x){
+                FC = 0;
+                break;
+            }
             ByteDataLength = WordDataLength * 2;
 #ifdef MbDebug
             Serial.print(" MB_FC_WRITE_MULTIPLE_REGISTERS_4x S=");

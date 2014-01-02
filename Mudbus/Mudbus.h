@@ -26,17 +26,10 @@
 #ifndef Mudbus_h
 #define Mudbus_h
 
-/*
-Below are the limits of the number of accessible registers, coils and inputs.
-
-Observe that there are no checking if you try to access anything outside the limits.
-If you for example try to read the holding register on address 65 you will simply get 
-the value of a memory location used for something else. 
-
-If you try to write to anything outside the limits, disaster will strike... 
-DON'T DO THAT!!!
-
-*/
+//If a request is made which is out of the below allocated range, no response is sent.
+//The device handles it as a timeout, which has not caused any issues in testing.
+//Error Checking added Jan 2014 - Andrew Frahn / Emmertex
+//Fix ported over from https://github.com/emmertex/Modbus-Library
 
 #define MB_N_C_0x 100 //Max coils for Modbus is 100 due to limited memory
 #define MB_N_I_1x 100 //Max inputs for Modbus is 100 due to limited memory
