@@ -79,12 +79,13 @@ void Mudbus::Run()
 
     while (FC != 0) {
         //**1**************** Read Coils **********************
-        if(FC == MB_FC_READ_COILS_0x)
+        if(FC == 1) 
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
             CoilDataLength = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]);
             if((Start+CoilDataLength) > MB_N_C_0x){
-                FC = 0;
+                FC += 128;
+                Exception = 2;
                 break;
             }
             ByteDataLength = CoilDataLength / 8;
@@ -109,17 +110,18 @@ void Mudbus::Run()
             MessageLength = ByteDataLength + 9;
             PopulateSendBuffer(&ByteReceiveArray[MessageStart], MessageLength);
             Writes = 1 + Writes * (Writes < 999);
-            FC = MB_FC_NONE;
+            FC = 0;
             buffer_restore();
         }
 
         //**2**************** Read descrete Inputs **********************
-        else if(FC == MB_FC_READ_INPUTS_1x)
+        else if(FC == 2) //Arduino does not seem to like handling enum as int.
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
             CoilDataLength = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]);
             if((Start+CoilDataLength) > MB_N_I_1x){
-                FC = 0;
+                FC += 128;
+                Exception = 2;
                 break;
             }
             ByteDataLength = CoilDataLength / 8;
@@ -144,17 +146,18 @@ void Mudbus::Run()
             MessageLength = ByteDataLength + 9;
             PopulateSendBuffer(&ByteReceiveArray[MessageStart], MessageLength);
             Writes = 1 + Writes * (Writes < 999);
-            FC = MB_FC_NONE;
+            FC = 0;
             buffer_restore();
         }
 
         //**3**************** Read Holding Registers ******************
-        else if(FC == MB_FC_READ_REGISTERS_4x)
+        else if(FC == 3)
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
             WordDataLength = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]);
             if((Start+WordDataLength) > MB_N_HR_4x){
-                FC = 0;
+                FC += 128;
+                Exception = 2;
                 break;
             }
             ByteDataLength = WordDataLength * 2;
@@ -175,17 +178,18 @@ void Mudbus::Run()
             MessageLength = ByteDataLength + 9;
             PopulateSendBuffer(&ByteReceiveArray[MessageStart], MessageLength);
             Writes = 1 + Writes * (Writes < 999);
-            FC = MB_FC_NONE;
+            FC = 0;
             buffer_restore();
         }
 
         //**4**************** Read Input Registers ******************
-        else if(FC == MB_FC_READ_INPUT_REGISTERS_3x)
+        else if(FC == 4)
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
             WordDataLength = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]);
             if((Start+WordDataLength) > MB_N_IR_3x){
-                FC = 0;
+                FC += 128;
+                Exception = 2;
                 break;
             }
             ByteDataLength = WordDataLength * 2;
@@ -206,18 +210,19 @@ void Mudbus::Run()
             MessageLength = ByteDataLength + 9;
             PopulateSendBuffer(&ByteReceiveArray[MessageStart], MessageLength);
             Writes = 1 + Writes * (Writes < 999);
-            FC = MB_FC_NONE;
+            FC = 0;
             buffer_restore();
         }
 
 
 
         //**5**************** Write Coil **********************
-        else if(FC == MB_FC_WRITE_COIL_0x)
+        else if(FC == 5)
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
             if(Start > MB_N_C_0x){
-                FC = 0;
+                FC += 128;
+                Exception = 2;
                 break;
             }
             C[Start] = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]) > 0;
@@ -231,15 +236,16 @@ void Mudbus::Run()
             MessageLength = 12;
             PopulateSendBuffer(&ByteReceiveArray[MessageStart], MessageLength);
             Writes = 1 + Writes * (Writes < 999);
-            FC = MB_FC_NONE;
+            FC = 0;
         }
 
         //**6**************** Write Single Register ******************
-        else if(FC == MB_FC_WRITE_REGISTER_4x)
+        else if(FC == 6)
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
             if(Start > MB_N_HR_4x){
-                FC = 0;
+                FC += 128;
+                Exception = 2;
                 break;
             }
             R[Start] = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]);
@@ -253,17 +259,18 @@ void Mudbus::Run()
             MessageLength = 12;
             PopulateSendBuffer(&ByteReceiveArray[MessageStart], MessageLength);
             Writes = 1 + Writes * (Writes < 999);
-            FC = MB_FC_NONE;
+            FC = 0;
         }
 
 
         //**15**************** Write Multiple Coils **********************
-        else if(FC == MB_FC_WRITE_MULTIPLE_COILS_0x)
+        else if(FC == 15)
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
             CoilDataLength = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]);
             if((Start+CoilDataLength) > MB_N_C_0x){
-                FC = 0;
+                FC += 128;
+                Exception = 2;
                 break;
             }
             ByteDataLength = CoilDataLength / 8;
@@ -287,18 +294,19 @@ void Mudbus::Run()
             MessageLength = 12;
             PopulateSendBuffer(&ByteReceiveArray[MessageStart], MessageLength);
             Writes = 1 + Writes * (Writes < 999);
-            FC = MB_FC_NONE;
+            FC = 0;
             buffer_restore();
         }
 
 
         //**16**************** Write Multiple Registers ******************
-        else if(FC == MB_FC_WRITE_MULTIPLE_REGISTERS_4x)
+        else if(FC == 16)
         {
             Start = word(ByteReceiveArray[8 + MessageStart],ByteReceiveArray[9 + MessageStart]);
             WordDataLength = word(ByteReceiveArray[10 + MessageStart],ByteReceiveArray[11 + MessageStart]);
             if((Start+WordDataLength) > MB_N_HR_4x){
-                FC = 0;
+                FC += 128;
+                Exception = 2;
                 break;
             }
             ByteDataLength = WordDataLength * 2;
@@ -317,11 +325,25 @@ void Mudbus::Run()
             MessageLength = 12;
             PopulateSendBuffer(&ByteReceiveArray[MessageStart], MessageLength);
             Writes = 1 + Writes * (Writes < 999);
-            FC = MB_FC_NONE;
+            FC = 0;
             buffer_restore();
             }
 
-
+        //**80h+FC**************** Exception Handling ***************************
+        //     Jan 2014 - Andrew Frahn / Emmertex / emmertex@gmail.com          *
+        //     Fix ported in from: https://github.com/emmertex/Modbus-Library   *
+        //***********************************************************************
+        if (FC > 128) {
+            //80h + FC = Exception
+            buffer_save();
+            ByteReceiveArray[7 + MessageStart] += 128;      //Turn FC echo into Exception
+            ByteReceiveArray[5 + MessageStart] = 3;         //Number of bytes after this one
+            ByteReceiveArray[8 + MessageStart] = Exception; //Exception Code
+            PopulateSendBuffer(&ByteReceiveArray[MessageStart],9);
+            FC = 0; //MB_FC_NONE;
+            buffer_restore();
+        }
+        
         if (JustReceivedOne) {
             int i;
             MessageStart = MessageStart + 6 + ByteReceiveArray[5 + MessageStart];
@@ -332,7 +354,7 @@ void Mudbus::Run()
             if (MessageStart+5<TotalMessageLength) SetFC(ByteReceiveArray[7 + MessageStart]);
             else {
                 JustReceivedOne = false;
-                FC = MB_FC_NONE;
+                FC = 0; //MB_FC_NONE;
                 
 #ifdef MbDebug
                 for (i=0; i<NoOfBytesToSend; i++) {
@@ -409,32 +431,31 @@ void Mudbus::PopulateSendBuffer(uint8_t *SendBuffer, int NoOfBytes)
 }
 void Mudbus::SetFC(int fc)
 {
-
 // Read coils (FC 1) 0x
-    if(fc == 1) FC = MB_FC_READ_COILS_0x;
+    if(fc == 1) FC = 1;
 
 // Read input discretes (FC 2) 1x
-    else if(fc == 2) FC = MB_FC_READ_INPUTS_1x;
+    else if(fc == 2) FC = 2;
 
 // Read multiple registers (FC 3) 4x
-    else if(fc == 3) FC = MB_FC_READ_REGISTERS_4x;
+    else if(fc == 3) FC = 3;
 
 // Read input registers (FC 4) 3x
-    else if(fc == 4) FC = MB_FC_READ_INPUT_REGISTERS_3x;
+    else if(fc == 4) FC = 4;
 
 // Write coil (FC 5) 0x
-    else if(fc == 5) FC = MB_FC_WRITE_COIL_0x;
+    else if(fc == 5) FC = 5;
 
 // Write single register (FC 6) 4x
-    else if(fc == 6) FC = MB_FC_WRITE_REGISTER_4x;
+    else if(fc == 6) FC = 6;
 
 // Read exception status (FC 7) we skip this one
 
 // Force multiple coils (FC 15) 0x
-    else if(fc == 15) FC = MB_FC_WRITE_MULTIPLE_COILS_0x;
+    else if(fc == 15) FC = 15;
 
 // Write multiple registers (FC 16) 4x
-    else if(fc == 16) FC = MB_FC_WRITE_MULTIPLE_REGISTERS_4x;
+    else if(fc == 16) FC = 16;
 
 // Read general reference (FC 20)  we skip this one
 
@@ -446,9 +467,11 @@ void Mudbus::SetFC(int fc)
 
 // Read FIFO queue (FC 24)  we skip this one
     else {
-        Serial.print(" FC not supported: ");
+        Exception = 1;
+        Serial.print(" FC Not Supported: FC=");
         Serial.print(fc);
         Serial.println();
+        FC = fc + 128;
 
     }
 }
